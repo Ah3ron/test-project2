@@ -41,24 +41,24 @@ export default function ProjectListPage() {
         </Link>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <label className="input input-bordered flex items-center gap-2 flex-1">
+      <div className="flex flex-col gap-3 mb-6">
+        <label className="input input-bordered flex items-center gap-2 w-full">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
             type="text"
             className="grow"
-            placeholder="Поиск по названию или описанию..."
+            placeholder="Поиск..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </label>
-        <div className="join">
+        <div className="join overflow-x-auto flex-nowrap">
           {STATUS_FILTERS.map((s) => (
             <button
               key={s.value}
-              className={`btn join-item btn-sm ${filter === s.value ? "btn-primary" : ""}`}
+              className={`btn join-item btn-sm whitespace-nowrap ${filter === s.value ? "btn-primary" : ""}`}
               onClick={() => setFilter(s.value)}
             >
               {s.label}

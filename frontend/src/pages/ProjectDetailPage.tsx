@@ -62,67 +62,54 @@ export default function ProjectDetailPage() {
     <div className="min-h-screen flex flex-col bg-base-100">
       {/* Header */}
       <header className="shrink-0 bg-base-200 border-b border-base-300">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 min-w-0">
-            <button
-              type="button"
-              className="btn btn-ghost btn-sm shrink-0 gap-1"
-              onClick={() => navigate("/")}
-              aria-label="Назад"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-              </svg>
-              Назад
-            </button>
-
-            <div className="divider divider-horizontal mx-0" />
-
-            <div className="min-w-0">
-              <h1 className={`text-2xl font-bold truncate ${isCompleted ? "line-through opacity-60" : ""}`}>
-                {project.name}
-              </h1>
-              {project.description && (
-                <p className="text-sm opacity-60 truncate max-w-3xl mt-1">{project.description}</p>
-              )}
-            </div>
-
-          </div>
-
-          <div className="flex items-center gap-2">
-            <StatusBadge status={project.status as any} />
-            {!isCompleted && (
+        <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 sm:py-4">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
               <button
                 type="button"
-                className="btn btn-error btn-sm shrink-0 gap-1 btn-outline"
-                onClick={handleDelete}
+                className="btn btn-ghost btn-sm shrink-0"
+                onClick={() => navigate("/")}
+                aria-label="Назад"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
                 </svg>
-                Удалить
+                <span className="hidden sm:inline">Назад</span>
               </button>
-            )}
+
+              <div className="divider divider-horizontal mx-0" />
+
+              <div className="min-w-0">
+                <h1 className={`text-lg sm:text-2xl font-bold truncate ${isCompleted ? "line-through opacity-60" : ""}`}>
+                  {project.name}
+                </h1>
+                {project.description && (
+                  <p className="text-xs sm:text-sm opacity-60 truncate mt-0.5 sm:mt-1">{project.description}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <StatusBadge status={project.status as any} />
+              {!isCompleted && (
+                <button
+                  type="button"
+                  className="btn btn-error btn-sm shrink-0 gap-1 btn-outline"
+                  onClick={handleDelete}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  <span className="hidden sm:inline">Удалить</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </header>
 
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className="lg:col-span-2 space-y-6 min-w-0">
             {isCompleted ? (
               <section className="card bg-base-200">
@@ -187,7 +174,7 @@ export default function ProjectDetailPage() {
           </div>
 
           <aside className="min-w-0">
-            <div className="card bg-base-200 sticky top-6">
+            <div className="card bg-base-200 lg:sticky lg:top-6">
               <div className="card-body">
                 <h2 className="card-title text-lg flex items-center gap-2">
                   <svg

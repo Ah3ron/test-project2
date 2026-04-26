@@ -19,41 +19,23 @@ export default function ChangeLog({ entries }: { entries: ProjectChangeLog[] }) 
   }
 
   return (
-    <div className="overflow-x-auto max-h-64 overflow-y-auto">
-      <table className="table table-sm">
-        <thead>
-          <tr>
-            <th>Поле</th>
-            <th>Было</th>
-            <th>Стало</th>
-            <th>Дата</th>
-          </tr>
-        </thead>
-        <tbody>
-          {entries.map((entry) => (
-            <tr key={entry.id}>
-              <td className="font-medium">{fieldLabels[entry.fieldName] || entry.fieldName}</td>
-              <td>
-                {entry.oldValue ? (
-                  <span className="text-wrap break-all">{entry.oldValue}</span>
-                ) : (
-                  <span className="opacity-30">—</span>
-                )}
-              </td>
-              <td>
-                {entry.newValue ? (
-                  <span className="text-wrap break-all">{entry.newValue}</span>
-                ) : (
-                  <span className="opacity-30">—</span>
-                )}
-              </td>
-              <td className="text-xs opacity-50 whitespace-nowrap">
-                {new Date(entry.changedAt).toLocaleString("ru-RU")}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-3 max-h-64 overflow-y-auto">
+      {entries.map((entry) => (
+        <div key={entry.id} className="bg-base-300 rounded-lg p-3 text-sm space-y-1">
+          <div className="flex justify-between items-center">
+            <span className="font-medium">{fieldLabels[entry.fieldName] || entry.fieldName}</span>
+            <span className="text-xs opacity-50">{new Date(entry.changedAt).toLocaleString("ru-RU")}</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="opacity-50 text-xs">Было:</span>
+            <span className="break-all">{entry.oldValue || <span className="opacity-30">—</span>}</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="opacity-50 text-xs">Стало:</span>
+            <span className="break-all">{entry.newValue || <span className="opacity-30">—</span>}</span>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
