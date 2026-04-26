@@ -10,8 +10,9 @@ import ProjectDetailPage from "./pages/ProjectDetailPage";
 export default function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <Routes>
+      <div className="min-h-screen bg-base-200">
+        <Navbar />
+        <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
@@ -39,6 +40,7 @@ export default function App() {
           }
         />
       </Routes>
+      </div>
     </BrowserRouter>
   );
 }

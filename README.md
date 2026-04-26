@@ -1,4 +1,4 @@
-# Project Tracker
+# Трекер проектов
 
 Mini-система для ведения проектов с отслеживанием изменений и комментариями.
 
@@ -55,19 +55,19 @@ npm run dev
 
 | Method | Path | Auth | Description |
 |---|---|---|---|
-| POST | `/api/auth/sign-up/email` | No | Register |
-| POST | `/api/auth/sign-in/email` | No | Login |
-| POST | `/api/auth/sign-out` | Yes | Logout |
-| GET | `/api/auth/get-session` | Cookie | Get session |
-| GET | `/api/projects` | Yes | List projects |
-| POST | `/api/projects` | Yes | Create project |
-| GET | `/api/projects/:id` | Yes | Get project |
-| PUT | `/api/projects/:id` | Yes | Update project (403 if completed) |
-| DELETE | `/api/projects/:id` | Yes | Delete project |
-| GET | `/api/projects/:id/changelog` | Yes | Change history |
-| GET | `/api/comments/project/:projectId` | Yes | List comments |
-| POST | `/api/comments/project/:projectId` | Yes | Add comment |
-| DELETE | `/api/comments/:id` | Yes | Delete comment |
+| POST | `/api/auth/sign-up/email` | Нет | Регистрация |
+| POST | `/api/auth/sign-in/email` | Нет | Вход |
+| POST | `/api/auth/sign-out` | Да | Выход |
+| GET | `/api/auth/get-session` | Cookie | Получить сессию |
+| GET | `/api/projects` | Да | Список проектов |
+| POST | `/api/projects` | Да | Создать проект |
+| GET | `/api/projects/:id` | Да | Получить проект |
+| PUT | `/api/projects/:id` | Да | Обновить проект (403 если завершён) |
+| DELETE | `/api/projects/:id` | Да | Удалить проект |
+| GET | `/api/projects/:id/changelog` | Да | История изменений |
+| GET | `/api/comments/project/:projectId` | Да | Список комментариев |
+| POST | `/api/comments/project/:projectId` | Да | Добавить комментарий |
+| DELETE | `/api/comments/:id` | Да | Удалить комментарий |
 
 ## Бизнес-правила
 

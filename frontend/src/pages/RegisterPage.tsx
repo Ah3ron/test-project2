@@ -27,7 +27,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-base-200">
+    <div className="flex items-center justify-center bg-base-200">
       <div className="card w-full max-w-md shadow-xl bg-base-100">
         <div className="card-body">
           <h2 className="card-title text-2xl justify-center mb-4">Регистрация</h2>
