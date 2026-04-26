@@ -82,18 +82,18 @@ export default function ProjectDetailPage() {
             <div className="divider divider-horizontal mx-0" />
 
             <div className="min-w-0">
-              <h1 className="text-2xl font-bold truncate">{project?.name}</h1>
+              <h1 className={`text-2xl font-bold truncate ${isCompleted ? "line-through opacity-60" : ""}`}>
+                {project?.name}
+              </h1>
               {project?.description && (
                 <p className="text-sm opacity-60 truncate max-w-3xl mt-1">{project.description}</p>
               )}
             </div>
 
-            <div className="ml-3">
-              <StatusBadge status={project?.status as any} />
-            </div>
           </div>
 
           <div className="flex items-center gap-2">
+            <StatusBadge status={project?.status as any} />
             {!isCompleted && (
               <button
                 type="button"
@@ -120,15 +120,44 @@ export default function ProjectDetailPage() {
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6 min-w-0">
-            <div className="collapse collapse-arrow bg-base-200">
-              <input type="checkbox" defaultChecked />
-              <div className="collapse-title text-lg font-semibold">
-                {isCompleted ? "Детали проекта (только чтение)" : "Редактировать проект"}
+            {isCompleted ? (
+              <section className="card bg-base-200">
+                <div className="card-body">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h2 className="card-title text-lg">Проект завершён</h2>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="opacity-50">Название</span>
+                      <p className="font-medium mt-1">{project.name}</p>
+                    </div>
+                    <div>
+                      <span className="opacity-50">Статус</span>
+                      <p className="mt-1"><StatusBadge status={project.status as any} /></p>
+                    </div>
+                    {project.description && (
+                      <div className="sm:col-span-2">
+                        <span className="opacity-50">Описание</span>
+                        <p className="mt-1 whitespace-pre-wrap">{project.description}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </section>
+            ) : (
+              <div className="collapse collapse-arrow bg-base-200">
+                <input type="checkbox" defaultChecked />
+                <div className="collapse-title text-lg font-semibold">
+                  Редактировать проект
+                </div>
+                <div className="collapse-content">
+                  <ProjectForm project={project} mode="edit" onSaved={refetch} />
+                </div>
               </div>
-              <div className="collapse-content">
-                <ProjectForm project={project} mode="edit" onSaved={refetch} />
-              </div>
-            </div>
+            )}
 
             <section className="card bg-base-200">
               <div className="card-body">
