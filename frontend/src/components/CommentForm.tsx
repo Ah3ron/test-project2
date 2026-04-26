@@ -22,7 +22,7 @@ export default function CommentForm({ onSubmit, disabled }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <form onSubmit={handleSubmit} className="flex gap-2 items-center">
       <input
         type="text"
         className="input input-bordered flex-1"
@@ -33,10 +33,16 @@ export default function CommentForm({ onSubmit, disabled }: Props) {
       />
       <button
         type="submit"
-        className="btn btn-primary"
+        className="btn btn-primary btn-sm"
         disabled={disabled || loading || !content.trim()}
       >
-        {loading ? <span className="loading loading-spinner loading-sm" /> : "Отправить"}
+        {loading ? (
+          <span className="loading loading-spinner loading-sm" />
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          </svg>
+        )}
       </button>
     </form>
   );

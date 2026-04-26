@@ -45,8 +45,8 @@ export default function ProjectDetailPage() {
 
   if (error || !project) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div role="alert" className="alert alert-error">
+      <div className="flex-1 overflow-auto p-6">
+        <div role="alert" className="alert alert-error max-w-5xl mx-auto">
           <span>{error || "Project not found"}</span>
         </div>
       </div>
@@ -56,49 +56,139 @@ export default function ProjectDetailPage() {
   const isCompleted = project.status === "completed";
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-3">
-          <button className="btn btn-ghost btn-sm" onClick={() => navigate("/")}>
-            Назад
-          </button>
-          <h1 className="text-2xl font-bold">{project.name}</h1>
-          <StatusBadge status={project.status as ProjectStatus} />
-        </div>
-        {!isCompleted && (
-          <button className="btn btn-error btn-sm" onClick={handleDelete}>
-Удалить
-          </button>
-        )}
-      </div>
+    <div className="min-h-screen flex flex-col bg-base-100">
+      {/* Header */}
+      <header className="shrink-0 bg-base-200 border-b border-base-300">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              type="button"
+              className="btn btn-ghost btn-sm shrink-0 gap-1"
+              onClick={() => navigate("/")}
+              aria-label="Назад"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
+              Назад
+            </button>
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        <div>
-          <h2 className="text-lg font-semibold mb-4">
-            {isCompleted ? "Детали проекта (только чтение)" : "Редактировать проект"}
-          </h2>
-          <ProjectForm project={project} mode="edit" onSaved={refetch} />
-        </div>
+            <div className="divider divider-horizontal mx-0" />
 
-        <div className="space-y-8">
-          <div>
-            <h2 className="text-lg font-semibold mb-4">История изменений</h2>
-            <ChangeLog entries={changelog} />
-          </div>
+            <div className="min-w-0">
+              <h1 className="text-2xl font-bold truncate">{project?.name}</h1>
+              {project?.description && (
+                <p className="text-sm opacity-60 truncate max-w-3xl mt-1">{project.description}</p>
+              )}
+            </div>
 
-          <div>
-            <h2 className="text-lg font-semibold mb-4">Комментарии</h2>
-            <div className="space-y-4">
-              <CommentForm onSubmit={handleAddComment} />
-              <CommentList
-                comments={comments}
-                onDelete={handleDeleteComment}
-                currentUserId={session?.user?.id}
-              />
+            <div className="ml-3">
+              <StatusBadge status={project?.status as any} />
             </div>
           </div>
+
+          <div className="flex items-center gap-2">
+            {!isCompleted && (
+              <button
+                type="button"
+                className="btn btn-error btn-sm shrink-0 gap-1 btn-outline"
+                onClick={handleDelete}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Удалить
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      </header>
+
+      {/* Main */}
+      <main className="flex-1 overflow-y-auto">
+        <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left column: form + changelog (was comments before) */}
+          <div className="lg:col-span-2 space-y-6 min-w-0">
+            {/* Editable collapse */}
+            <div className="collapse collapse-arrow bg-base-200">
+              <input type="checkbox" defaultChecked />
+              <div className="collapse-title text-lg font-semibold">
+                {isCompleted ? "Детали проекта (только чтение)" : "Редактировать проект"}
+              </div>
+              <div className="collapse-content">
+                <ProjectForm project={project} mode="edit" onSaved={refetch} />
+              </div>
+            </div>
+
+            {/* ChangeLog card (moved to left) */}
+            <section className="card bg-base-200">
+              <div className="card-body">
+                <h2 className="card-title text-lg flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  История изменений
+                </h2>
+
+                <div className="mt-2">
+                  <ChangeLog entries={changelog} />
+                </div>
+              </div>
+            </section>
+          </div>
+
+          {/* Right column: comments (sticky) */}
+          <aside className="min-w-0">
+            <div className="card bg-base-200 sticky top-6">
+              <div className="card-body">
+                <h2 className="card-title text-lg flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  Комментарии
+                  {comments?.length > 0 && (
+                    <span className="badge badge-sm badge-ghost">{comments.length}</span>
+                  )}
+                </h2>
+
+                <div className="space-y-4 mt-2">
+                  <CommentForm onSubmit={handleAddComment} />
+                  <CommentList comments={comments} onDelete={handleDeleteComment} currentUserId={session?.user?.id} />
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </main>
     </div>
   );
 }
+

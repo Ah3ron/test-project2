@@ -9,38 +9,38 @@ import ProjectDetailPage from "./pages/ProjectDetailPage";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-base-200">
+    <div className="h-screen flex flex-col">
+      <BrowserRouter>
         <Navbar />
         <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <ProjectListPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/projects/new"
-          element={
-            <ProtectedRoute>
-              <ProjectCreatePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/projects/:id"
-          element={
-            <ProtectedRoute>
-              <ProjectDetailPage />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-      </div>
-    </BrowserRouter>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <ProjectListPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/projects/new"
+            element={
+              <ProtectedRoute>
+                <ProjectCreatePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/projects/:id"
+            element={
+              <ProtectedRoute>
+                <ProjectDetailPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
