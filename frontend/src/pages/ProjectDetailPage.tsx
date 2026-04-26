@@ -7,7 +7,6 @@ import ProjectForm from "../components/ProjectForm";
 import ChangeLog from "../components/ChangeLog";
 import CommentList from "../components/CommentList";
 import CommentForm from "../components/CommentForm";
-import type { ProjectStatus } from "../types";
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -118,12 +117,9 @@ export default function ProjectDetailPage() {
         </div>
       </header>
 
-      {/* Main */}
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left column: form + changelog (was comments before) */}
           <div className="lg:col-span-2 space-y-6 min-w-0">
-            {/* Editable collapse */}
             <div className="collapse collapse-arrow bg-base-200">
               <input type="checkbox" defaultChecked />
               <div className="collapse-title text-lg font-semibold">
@@ -134,7 +130,6 @@ export default function ProjectDetailPage() {
               </div>
             </div>
 
-            {/* ChangeLog card (moved to left) */}
             <section className="card bg-base-200">
               <div className="card-body">
                 <h2 className="card-title text-lg flex items-center gap-2">
@@ -158,7 +153,6 @@ export default function ProjectDetailPage() {
             </section>
           </div>
 
-          {/* Right column: comments (sticky) */}
           <aside className="min-w-0">
             <div className="card bg-base-200 sticky top-6">
               <div className="card-body">

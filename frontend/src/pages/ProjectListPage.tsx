@@ -54,7 +54,7 @@ export default function ProjectListPage() {
           {STATUS_FILTERS.map((s) => (
             <button
               key={s.value}
-              className={`btn join-item btn-sm ${filter === s.value ? "btn-primary" : "btn-ghost"}`}
+              className={`btn join-item btn-sm ${filter === s.value ? "btn-primary" : ""}`}
               onClick={() => setFilter(s.value)}
             >
               {s.label}
