@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSession } from "../lib/auth-client";
-import { useProject } from "../hooks/useProject";
-import { api } from "../api/client";
+import { useProjectDetailStore, useProjectStore } from "../store";
 import StatusBadge from "../components/StatusBadge";
 import ProjectForm from "../components/ProjectForm";
 import ChangeLog from "../components/ChangeLog";
@@ -12,12 +12,18 @@ export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: session } = useSession();
-  const { project, changelog, comments, loading, error, refetch } = useProject(id!);
+  const { project, changelog, comments, loading, error, fetchDetail, addComment, deleteComment, reset } = useProjectDetailStore();
+  const deleteProject = useProjectStore((s) => s.deleteProject);
+
+  useEffect(() => {
+    if (id) fetchDetail(id);
+    return () => reset();
+  }, [id, fetchDetail, reset]);
 
   const handleDelete = async () => {
     if (!project || !confirm("Удалить этот проект?")) return;
     try {
-      await api.projects.delete(project.id);
+      await deleteProject(project.id);
       navigate("/");
     } catch {
       alert("Не удалось удалить проект");
@@ -25,13 +31,11 @@ export default function ProjectDetailPage() {
   };
 
   const handleAddComment = async (content: string) => {
-    await api.comments.create(id!, content);
-    refetch();
+    await addComment(id!, content);
   };
 
   const handleDeleteComment = async (commentId: string) => {
-    await api.comments.delete(commentId);
-    refetch();
+    await deleteComment(commentId);
   };
 
   if (loading) {
@@ -83,9 +87,9 @@ export default function ProjectDetailPage() {
 
             <div className="min-w-0">
               <h1 className={`text-2xl font-bold truncate ${isCompleted ? "line-through opacity-60" : ""}`}>
-                {project?.name}
+                {project.name}
               </h1>
-              {project?.description && (
+              {project.description && (
                 <p className="text-sm opacity-60 truncate max-w-3xl mt-1">{project.description}</p>
               )}
             </div>
@@ -93,7 +97,7 @@ export default function ProjectDetailPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <StatusBadge status={project?.status as any} />
+            <StatusBadge status={project.status as any} />
             {!isCompleted && (
               <button
                 type="button"
@@ -154,7 +158,7 @@ export default function ProjectDetailPage() {
                   Редактировать проект
                 </div>
                 <div className="collapse-content">
-                  <ProjectForm project={project} mode="edit" onSaved={refetch} />
+                  <ProjectForm project={project} mode="edit" onSaved={() => fetchDetail(id!)} />
                 </div>
               </div>
             )}
@@ -214,4 +218,3 @@ export default function ProjectDetailPage() {
     </div>
   );
 }
-

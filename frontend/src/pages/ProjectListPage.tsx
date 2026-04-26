@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useProjects } from "../hooks/useProjects";
+import { useProjectStore } from "../store";
 import StatusBadge from "../components/StatusBadge";
 import type { ProjectStatus } from "../types";
 
@@ -12,7 +12,11 @@ const STATUS_FILTERS: { value: ProjectStatus | "all"; label: string }[] = [
 ];
 
 export default function ProjectListPage() {
-  const { projects, loading, error } = useProjects();
+  const { projects, loading, error, fetchProjects } = useProjectStore();
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
   const [filter, setFilter] = useState<ProjectStatus | "all">("all");
   const [search, setSearch] = useState("");
 

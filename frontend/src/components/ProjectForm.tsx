@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Project, CreateProjectData, UpdateProjectData, ProjectStatus } from "../types";
-import { api } from "../api/client";
+import { useProjectStore } from "../store";
 
 interface Props {
   project?: Project;
@@ -11,6 +11,8 @@ interface Props {
 
 export default function ProjectForm({ project, mode, onSaved }: Props) {
   const navigate = useNavigate();
+  const createProject = useProjectStore((s) => s.createProject);
+  const updateProject = useProjectStore((s) => s.updateProject);
   const [name, setName] = useState(project?.name || "");
   const [description, setDescription] = useState(project?.description || "");
   const [status, setStatus] = useState<ProjectStatus>(project?.status || "planned");
@@ -27,11 +29,11 @@ export default function ProjectForm({ project, mode, onSaved }: Props) {
     try {
       if (mode === "create") {
         const data: CreateProjectData = { name, description: description || undefined, status };
-        await api.projects.create(data);
+        await createProject(data);
         navigate("/");
       } else if (project) {
         const data: UpdateProjectData = { name, description, status };
-        await api.projects.update(project.id, data);
+        await updateProject(project.id, data);
         onSaved?.();
       }
     } catch (err) {
