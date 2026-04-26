@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Project, ProjectChangeLog, ProjectComment, CreateProjectData, UpdateProjectData } from "../types";
+import type { Project, ProjectChangeLog, ProjectComment, CreateProjectData, UpdateProjectData, ProjectStatus } from "../types";
 import { api } from "../api/client";
 
 interface ProjectState {
@@ -79,8 +79,9 @@ export const useProjectDetailStore = create<ProjectDetailState>((set) => ({
   },
 
   addComment: async (projectId, content) => {
-    const comment = await api.comments.create(projectId, content);
-    set((s) => ({ comments: [...s.comments, comment] }));
+    await api.comments.create(projectId, content);
+    const comments = await api.comments.list(projectId);
+    set({ comments });
   },
 
   deleteComment: async (commentId) => {
@@ -89,4 +90,112 @@ export const useProjectDetailStore = create<ProjectDetailState>((set) => ({
   },
 
   reset: () => set({ project: null, changelog: [], comments: [], loading: false, error: null }),
+}));
+
+interface LoginFormState {
+  email: string;
+  password: string;
+  error: string | null;
+  loading: boolean;
+  setEmail: (v: string) => void;
+  setPassword: (v: string) => void;
+  setError: (v: string | null) => void;
+  setLoading: (v: boolean) => void;
+  reset: () => void;
+}
+
+const loginInit = { email: "", password: "", error: null, loading: false };
+
+export const useLoginFormStore = create<LoginFormState>((set) => ({
+  ...loginInit,
+  setEmail: (email) => set({ email }),
+  setPassword: (password) => set({ password }),
+  setError: (error) => set({ error }),
+  setLoading: (loading) => set({ loading }),
+  reset: () => set(loginInit),
+}));
+
+interface RegisterFormState {
+  name: string;
+  email: string;
+  password: string;
+  error: string | null;
+  loading: boolean;
+  setName: (v: string) => void;
+  setEmail: (v: string) => void;
+  setPassword: (v: string) => void;
+  setError: (v: string | null) => void;
+  setLoading: (v: boolean) => void;
+  reset: () => void;
+}
+
+const registerInit = { name: "", email: "", password: "", error: null, loading: false };
+
+export const useRegisterFormStore = create<RegisterFormState>((set) => ({
+  ...registerInit,
+  setName: (name) => set({ name }),
+  setEmail: (email) => set({ email }),
+  setPassword: (password) => set({ password }),
+  setError: (error) => set({ error }),
+  setLoading: (loading) => set({ loading }),
+  reset: () => set(registerInit),
+}));
+
+interface ProjectFormState {
+  name: string;
+  description: string;
+  status: ProjectStatus;
+  loading: boolean;
+  error: string | null;
+  setName: (v: string) => void;
+  setDescription: (v: string) => void;
+  setStatus: (v: ProjectStatus) => void;
+  setLoading: (v: boolean) => void;
+  setError: (v: string | null) => void;
+  init: (name: string, description: string, status: ProjectStatus) => void;
+  reset: () => void;
+}
+
+const projectFormInit = { name: "", description: "", status: "planned" as ProjectStatus, loading: false, error: null };
+
+export const useProjectFormStore = create<ProjectFormState>((set) => ({
+  ...projectFormInit,
+  setName: (name) => set({ name }),
+  setDescription: (description) => set({ description }),
+  setStatus: (status) => set({ status }),
+  setLoading: (loading) => set({ loading }),
+  setError: (error) => set({ error }),
+  init: (name, description, status) => set({ name, description, status, loading: false, error: null }),
+  reset: () => set(projectFormInit),
+}));
+
+interface CommentFormState {
+  content: string;
+  loading: boolean;
+  setContent: (v: string) => void;
+  setLoading: (v: boolean) => void;
+  reset: () => void;
+}
+
+const commentFormInit = { content: "", loading: false };
+
+export const useCommentFormStore = create<CommentFormState>((set) => ({
+  ...commentFormInit,
+  setContent: (content) => set({ content }),
+  setLoading: (loading) => set({ loading }),
+  reset: () => set(commentFormInit),
+}));
+
+interface ListFilterState {
+  filter: ProjectStatus | "all";
+  search: string;
+  setFilter: (v: ProjectStatus | "all") => void;
+  setSearch: (v: string) => void;
+}
+
+export const useListFilterStore = create<ListFilterState>((set) => ({
+  filter: "all",
+  search: "",
+  setFilter: (filter) => set({ filter }),
+  setSearch: (search) => set({ search }),
 }));

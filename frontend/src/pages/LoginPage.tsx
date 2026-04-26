@@ -1,20 +1,22 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn, useSession } from "../lib/auth-client";
+import { useLoginFormStore } from "../store";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { data: session, isPending } = useSession();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { email, password, error, loading, setEmail, setPassword, setError, setLoading, reset } = useLoginFormStore();
 
   useEffect(() => {
     if (session) {
       navigate("/", { replace: true });
     }
   }, [session, navigate]);
+
+  useEffect(() => {
+    return () => reset();
+  }, [reset]);
 
   if (isPending) {
     return (

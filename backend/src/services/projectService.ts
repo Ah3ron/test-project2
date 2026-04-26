@@ -140,7 +140,17 @@ export async function addComment(
     .insert(projectComments)
     .values({ projectId, userId, content })
     .returning();
-  return comment;
+
+  const [user] = await db
+    .select({ name: users.name, email: users.email })
+    .from(users)
+    .where(eq(users.id, userId));
+
+  return {
+    ...comment,
+    userName: user?.name ?? null,
+    userEmail: user?.email ?? null,
+  };
 }
 
 export async function deleteComment(commentId: string, userId: string) {

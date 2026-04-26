@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCommentFormStore } from "../store";
 
 interface Props {
   onSubmit: (content: string) => Promise<void>;
@@ -6,8 +6,7 @@ interface Props {
 }
 
 export default function CommentForm({ onSubmit, disabled }: Props) {
-  const [content, setContent] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { content, loading, setContent, setLoading, reset } = useCommentFormStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,7 +14,7 @@ export default function CommentForm({ onSubmit, disabled }: Props) {
     setLoading(true);
     try {
       await onSubmit(content.trim());
-      setContent("");
+      reset();
     } finally {
       setLoading(false);
     }

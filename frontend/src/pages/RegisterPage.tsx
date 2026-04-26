@@ -1,14 +1,10 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../lib/auth-client";
+import { useRegisterFormStore } from "../store";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { name, email, password, error, loading, setName, setEmail, setPassword, setError, setLoading, reset } = useRegisterFormStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +19,7 @@ export default function RegisterPage() {
       return;
     }
 
+    reset();
     navigate("/");
   };
 

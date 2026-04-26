@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Project, CreateProjectData, UpdateProjectData, ProjectStatus } from "../types";
-import { useProjectStore } from "../store";
+import { useProjectStore, useProjectFormStore } from "../store";
 
 interface Props {
   project?: Project;
@@ -13,11 +13,11 @@ export default function ProjectForm({ project, mode, onSaved }: Props) {
   const navigate = useNavigate();
   const createProject = useProjectStore((s) => s.createProject);
   const updateProject = useProjectStore((s) => s.updateProject);
-  const [name, setName] = useState(project?.name || "");
-  const [description, setDescription] = useState(project?.description || "");
-  const [status, setStatus] = useState<ProjectStatus>(project?.status || "planned");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { name, description, status, loading, error, setName, setDescription, setStatus, setLoading, setError, init } = useProjectFormStore();
+
+  useEffect(() => {
+    init(project?.name || "", project?.description || "", project?.status || "planned");
+  }, [project, init]);
 
   const isCompleted = project?.status === "completed" && mode === "edit";
 
