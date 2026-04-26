@@ -1,13 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signIn } from "../lib/auth-client";
+import { signIn, useSession } from "../lib/auth-client";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { data: session, isPending } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (session) {
+      navigate("/", { replace: true });
+    }
+  }, [session, navigate]);
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center py-20">
+        <span className="loading loading-spinner loading-lg" />
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,8 +36,6 @@ export default function LoginPage() {
       setLoading(false);
       return;
     }
-
-    navigate("/");
   };
 
   return (
